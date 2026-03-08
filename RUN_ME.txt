@@ -1,0 +1,8 @@
+# Start Backend
+# In a separate terminal run:
+# python backend.py
+
+# Start Frontend
+# In a separate terminal run:
+# cd frontend
+# npm run dev

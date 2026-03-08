@@ -1,0 +1,192 @@
+{% extends 'base.html' %} 
+{% block title %}Home - Securinets iset'r{% endblock %} 
+
+{% block body %}
+<div class="page-container">
+  <!-- Top Header -->
+  <header>
+    <span>Welcome, {{ username }}!</span>
+    <div class="logout-section">
+      <form method="POST" action="{{ url_for('logout') }}" class="logout-form">
+        <button type="submit" class="logout-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Logout</span>
+        </button>
+      </form>
+    </div>
+  </header>
+  
+  <!-- Channels Sidebar -->
+  <div class="channels-sidebar">
+    <div class="server-header">
+      <i class="fas fa-shield-alt"></i>
+      <span>SECURINETS ISET'R</span>
+    </div>
+    
+    <div class="channels-section">
+      <div class="section-title">
+        <span>CHANNELS</span>
+      </div>
+      
+      <div class="channel active" data-channel="home">
+        <i class="fas fa-home"></i>
+        <span>General</span>
+      </div>
+      
+      <div class="section-title">
+        <span>CHALLENGE CATEGORIES</span>
+      </div>
+      
+      <div class="channel" data-channel="crypto">
+        <i class="fas fa-lock"></i>
+        <span>Cryptography</span>
+      </div>
+      
+      <div class="channel" data-channel="web_exp">
+        <i class="fas fa-globe"></i>
+        <span>Web Exploitation</span>
+      </div>
+      
+      <div class="channel" data-channel="reverse">
+        <i class="fas fa-code"></i>
+        <span>Reverse Engineering</span>
+      </div>
+      
+      <div class="channel" data-channel="forensics">
+        <i class="fas fa-search"></i>
+        <span>Forensics</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content Container -->
+  <div class="channel-content-container">
+    <div id="channel-content">
+      {% if msg %}
+      <div class="flash-message">{{ msg }}</div>
+      {% endif %}
+
+      <div class="main-layout">
+        <!-- Posts Area -->
+        <main class="posts-area">
+          {% if posts %} 
+          {% for post in posts %}
+          <div class="post" id="post-{{ post.post_id }}">
+            <p><strong>{{ post.poster }}</strong> <small style="color: var(--discord-channel-default);">{{ post.post_datetime }}</small></p>
+            <p style="margin-top: 8px;">{{ post.post_content }}</p>
+
+            <!-- Post Actions -->
+            <div class="post-actions">
+              <button class="reply-btn" data-post-id="{{ post.post_id }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+                Reply
+              </button>
+
+              <a href="#" class="toggle-replies" data-post-id="{{ post.post_id }}">
+                Show Replies
+              </a>
+            </div>
+
+            <!-- Reply Form (Hidden) -->
+            <div class="reply-form-container" id="reply-form-{{ post.post_id }}" style="display: none">
+              <form method="POST" action="{{ url_for('home_page') }}" class="reply-form">
+                <input type="hidden" name="form_type" value="reply" />
+                <input type="hidden" name="post_id" value="{{ post.post_id }}" />
+                <div class="form-group">
+                  <textarea name="reply_content" class="reply-textarea" placeholder="Write your reply..." rows="2" required></textarea>
+                </div>
+                <div class="form-footer">
+                  <button type="button" class="cancel-reply-btn" data-post-id="{{ post.post_id }}">Cancel</button>
+                  <button type="submit" class="submit-reply-btn">Reply</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Replies Section (Hidden) -->
+            <div class="replies-section" id="replies-{{ post.post_id }}" style="display: none">
+              <table class="replies-table">
+                {% if replies %} 
+                {% set post_replies = [] %}
+                {% for reply in replies %} 
+                {% if reply.post_id == post.post_id %} 
+                {% set _ = post_replies.append(reply) %} 
+                {% endif %} 
+                {% endfor %}
+                
+                {% if post_replies %} 
+                {% for reply in post_replies %}
+                <tr>
+                  <td><strong>{{ reply.replier }}</strong> <small>{{ reply.reply_datetime }}</small></td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom: 12px;">{{ reply.reply_content }}</td>
+                </tr>
+                {% endfor %} 
+                {% else %}
+                <tr><td>No replies yet</td></tr>
+                {% endif %} 
+                {% else %}
+                <tr><td>No replies yet</td></tr>
+                {% endif %}
+              </table>
+            </div>
+          </div>
+          {% endfor %} 
+          {% else %}
+          <div class="discord-card">
+            <p style="text-align: center; color: var(--discord-channel-default);">No posts yet. Be the first to post!</p>
+          </div>
+          {% endif %}
+        </main>
+
+        <!-- Users Sidebar -->
+        <aside class="users-sidebar">
+          <div class="users-container">
+            <h3>Online Members</h3>
+            <div class="users-list">
+              {% if users %} 
+              {% for user in users %} 
+              {% if user.username != 'administrator' %}
+              <div class="user-item">{{ user.username }}</div>
+              {% endif %} 
+              {% endfor %} 
+              {% else %}
+              <p class="no-users">No users found</p>
+              {% endif %}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fixed Create Post Bar -->
+<div class="fixed-create-post">
+  <form method="POST" action="{{ url_for('home_page') }}" class="create-post-form">
+    <input type="hidden" name="form_type" value="new_post" />
+    <div class="create-post-container">
+      <div class="input-wrapper">
+        <textarea name="post_content" class="create-post-textarea" placeholder="Message #general..." rows="1" required></textarea>
+      </div>
+      <div class="submit-wrapper">
+        <button type="submit" class="create-post-submit-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>Post</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/channel-handlers.js') }}"></script>
+{% endblock %}

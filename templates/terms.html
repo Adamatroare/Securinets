@@ -1,0 +1,648 @@
+{% extends 'base.html' %} 
+{% block title %}Terms & Conditions{% endblock %}
+
+{% block body %}
+<div class="terms-container">
+  <div class="terms-card">
+    <!-- Header Section -->
+    <div class="terms-header">
+      <div class="terms-brand">
+        <div class="terms-logo">📜</div>
+        <h1>Community Guidelines</h1>
+      </div>
+      <p class="terms-subtitle">Before you proceed, please review our community standards</p>
+    </div>
+
+    <!-- Terms Content Section -->
+    <div class="terms-content">
+      <div class="terms-message">
+        <div class="message-icon">⚠️</div>
+        <div class="message-text">
+          <h3>Important Notice</h3>
+          <p>Welcome to our community! We believe in freedom of expression and minimal restrictions.</p>
+        </div>
+      </div>
+
+      <!-- The Main Phrase -->
+      <div class="rules-section">
+        <div class="rules-card">
+          <div class="rules-header">
+            <span class="rules-icon">📌</span>
+            <h2>Our Guiding Principle</h2>
+          </div>
+          <div class="rules-body">
+            <div class="rule-item">
+              <div class="rule-number">§1</div>
+              <div class="rule-text">
+                <h3>The Fundamental Rule</h3>
+                <p class="rule-description">
+                  <strong>There are no rules.</strong>
+                </p>
+                <p class="rule-explanation">
+                  We trust our community members to engage respectfully and responsibly. 
+                  While we don't impose strict rules, we expect everyone to contribute 
+                  positively to the community spirit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Expectations -->
+      <div class="expectations-section">
+        <h3><span class="expectations-icon">🤝</span> Community Expectations</h3>
+        <div class="expectations-grid">
+          <div class="expectation-item">
+            <div class="expectation-icon">💬</div>
+            <div class="expectation-content">
+              <h4>Free Expression</h4>
+              <p>Share your thoughts openly and honestly</p>
+            </div>
+          </div>
+          <div class="expectation-item">
+            <div class="expectation-icon">👥</div>
+            <div class="expectation-content">
+              <h4>Mutual Respect</h4>
+              <p>Value diverse perspectives and experiences</p>
+            </div>
+          </div>
+          <div class="expectation-item">
+            <div class="expectation-icon">🛡️</div>
+            <div class="expectation-content">
+              <h4>Common Sense</h4>
+              <p>Use your best judgment in all interactions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accept Terms Form -->
+    <!-- CHANGED: action="{{ url_for('terms') }}" -->
+    <form action="{{ url_for('terms') }}" method="POST" class="terms-form">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="terms-error">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="terms-agreement">
+        <div class="checkbox-container">
+          <input 
+            type="checkbox" 
+            id="accept-terms" 
+            name="accept_terms" 
+            class="terms-checkbox"
+            required
+          >
+          <label for="accept-terms" class="checkbox-label">
+            <div class="checkbox-custom">
+              <svg class="checkmark" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="checkbox-text">
+              <span class="checkbox-title">I understand and agree</span>
+              <span class="checkbox-description">
+                By checking this box, I acknowledge that I've read the community guidelines
+                and agree to participate responsibly.
+              </span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="terms-actions">
+        <button 
+          type="submit" 
+          class="terms-submit-btn" 
+          id="submitBtn"
+          disabled
+        >
+          <span class="btn-text">Continue to Community</span>
+          <span class="btn-icon">→</span>
+        </button>
+        
+        <a href="{{ url_for('logout') }}" class="terms-decline">
+          I don't agree, log me out
+        </a>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="terms-footer">
+      <p class="footer-text">
+        Questions? Contact <a href="mailto:support@community.com" class="footer-link">community support</a>
+      </p>
+      <p class="footer-note">
+        Remember: With great freedom comes great responsibility.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Checkbox Logic -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const checkbox = document.getElementById('accept-terms');
+  const submitBtn = document.getElementById('submitBtn');
+  
+  // Initially disable the submit button
+  submitBtn.disabled = true;
+  
+  // Add event listener to checkbox
+  checkbox.addEventListener('change', function() {
+    submitBtn.disabled = !this.checked;
+    
+    // Add visual feedback
+    if (this.checked) {
+      submitBtn.classList.add('enabled');
+    } else {
+      submitBtn.classList.remove('enabled');
+    }
+  });
+  
+  // Form submission feedback
+  const form = document.querySelector('.terms-form');
+  form.addEventListener('submit', function(e) {
+    if (!checkbox.checked) {
+      e.preventDefault();
+      alert('Please accept the terms to continue.');
+      return false;
+    }
+    
+    // Add loading state
+    submitBtn.innerHTML = '<span class="btn-text">Processing...</span>';
+    submitBtn.disabled = true;
+  });
+});
+</script>
+
+<!-- Discord-like Styling -->
+<style>
+/* Discord Theme Variables */
+:root {
+  --discord-dark: #36393f;
+  --discord-darker: #2f3136;
+  --discord-darkest: #202225;
+  --discord-blurple: #5865f2;
+  --discord-blurple-hover: #4752c4;
+  --discord-green: #57f287;
+  --discord-yellow: #fee75c;
+  --discord-red: #ed4245;
+  --discord-gray: #4f545c;
+  --discord-light-gray: #b9bbbe;
+  --discord-text: #dcddde;
+  --discord-white: #ffffff;
+  --discord-input-bg: #40444b;
+  --discord-card-bg: #2f3136;
+  --discord-border: #202225;
+  --discord-success: #3ba55d;
+}
+
+/* Container */
+.terms-container {
+  min-height: 100vh;
+  background-color: var(--discord-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Main Card */
+.terms-card {
+  max-width: 800px;
+  width: 100%;
+  background-color: var(--discord-card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--discord-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* Header */
+.terms-header {
+  padding: 40px 40px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--discord-border);
+}
+
+.terms-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.terms-logo {
+  font-size: 48px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.terms-header h1 {
+  color: var(--discord-white);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.terms-subtitle {
+  color: var(--discord-light-gray);
+  font-size: 16px;
+  margin: 10px 0 0;
+}
+
+/* Content */
+.terms-content {
+  padding: 30px 40px;
+}
+
+.terms-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: rgba(254, 231, 92, 0.1);
+  border: 1px solid var(--discord-yellow);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.message-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.message-text h3 {
+  color: var(--discord-yellow);
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.message-text p {
+  color: var(--discord-text);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Rules Section */
+.rules-section {
+  margin-bottom: 40px;
+}
+
+.rules-card {
+  background: linear-gradient(145deg, rgba(88, 101, 242, 0.1), rgba(87, 242, 135, 0.05));
+  border: 1px solid var(--discord-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rules-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--discord-border);
+}
+
+.rules-icon {
+  font-size: 24px;
+}
+
+.rules-header h2 {
+  color: var(--discord-white);
+  margin: 0;
+  font-size: 24px;
+}
+
+.rules-body {
+  padding: 30px;
+}
+
+.rule-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.rule-number {
+  background: var(--discord-blurple);
+  color: var(--discord-white);
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rule-text h3 {
+  color: var(--discord-white);
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.rule-description {
+  color: var(--discord-green);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(87, 242, 135, 0.1);
+  border-radius: 6px;
+  border-left: 4px solid var(--discord-green);
+  text-align: center;
+}
+
+.rule-explanation {
+  color: var(--discord-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Expectations */
+.expectations-section {
+  margin-top: 40px;
+}
+
+.expectations-section h3 {
+  color: var(--discord-white);
+  font-size: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.expectations-icon {
+  font-size: 24px;
+}
+
+.expectations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.expectation-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: var(--discord-darker);
+  border-radius: 8px;
+  border: 1px solid var(--discord-border);
+  transition: all 0.3s ease;
+}
+
+.expectation-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--discord-blurple);
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.1);
+}
+
+.expectation-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.expectation-content h4 {
+  color: var(--discord-white);
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.expectation-content p {
+  color: var(--discord-light-gray);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Form */
+.terms-form {
+  padding: 0 40px 30px;
+}
+
+.terms-error {
+  background: rgba(237, 66, 69, 0.1);
+  border: 1px solid var(--discord-red);
+  color: var(--discord-red);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.terms-agreement {
+  margin-bottom: 30px;
+}
+
+.checkbox-container {
+  display: flex;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  cursor: pointer;
+  padding: 15px;
+  background: var(--discord-darker);
+  border-radius: 8px;
+  border: 1px solid var(--discord-border);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.checkbox-label:hover {
+  border-color: var(--discord-blurple);
+  background: rgba(88, 101, 242, 0.05);
+}
+
+.checkbox-custom {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--discord-gray);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  margin-top: 2px;
+}
+
+.checkbox-custom .checkmark {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#accept-terms:checked + .checkbox-label .checkbox-custom {
+  background: var(--discord-success);
+  border-color: var(--discord-success);
+}
+
+#accept-terms:checked + .checkbox-label .checkbox-custom .checkmark {
+  opacity: 1;
+}
+
+.checkbox-text {
+  flex: 1;
+}
+
+.checkbox-title {
+  display: block;
+  color: var(--discord-white);
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.checkbox-description {
+  display: block;
+  color: var(--discord-light-gray);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Hide default checkbox */
+#accept-terms {
+  display: none;
+}
+
+/* Actions */
+.terms-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.terms-submit-btn {
+  background: var(--discord-gray);
+  color: var(--discord-light-gray);
+  border: none;
+  border-radius: 4px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.terms-submit-btn.enabled {
+  background: var(--discord-success);
+  color: var(--discord-white);
+  cursor: pointer;
+}
+
+.terms-submit-btn.enabled:hover {
+  background: #2d7d46;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 165, 93, 0.2);
+}
+
+.btn-text {
+  flex: 1;
+  text-align: center;
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.terms-decline {
+  color: var(--discord-red);
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.terms-decline:hover {
+  background: rgba(237, 66, 69, 0.1);
+  text-decoration: underline;
+}
+
+/* Footer */
+.terms-footer {
+  padding: 20px 40px;
+  border-top: 1px solid var(--discord-border);
+  text-align: center;
+  background: var(--discord-darker);
+}
+
+.footer-text {
+  color: var(--discord-light-gray);
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.footer-link {
+  color: var(--discord-blurple);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.footer-note {
+  color: var(--discord-green);
+  font-size: 14px;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .terms-card {
+    margin: 10px;
+  }
+  
+  .terms-header,
+  .terms-content,
+  .terms-form {
+    padding: 20px;
+  }
+  
+  .terms-header h1 {
+    font-size: 24px;
+  }
+  
+  .rule-description {
+    font-size: 20px;
+  }
+  
+  .expectations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .rules-body {
+    padding: 20px;
+  }
+}
+</style>
+{% endblock %}

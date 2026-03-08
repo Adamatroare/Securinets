@@ -1,0 +1,218 @@
+{% extends 'base.html' %} {% block title %}Securinets{% endblock %} {%
+block body %}{% block flash_messages %}{% endblock %}
+<style>
+  .welcome-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+  }
+  
+  .welcome-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/static/sec.png'); /* Make sure sec.png is in your static folder */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.6); /* Reduced from 0.3 to 0.6 for more visibility */
+    z-index: -1;
+  }
+  
+  .welcome-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(54, 57, 63, 0.7) 0%,  /* Reduced opacity from 0.85 to 0.7 */
+      rgba(32, 34, 37, 0.8) 100%  /* Reduced opacity from 0.9 to 0.8 */
+    );
+    z-index: -1;
+  }
+  
+  .discord-card {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(47, 49, 54, 0.85); /* Reduced opacity from 0.95 to 0.85 */
+    border: 1px solid var(--discord-border);
+    border-radius: 8px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px); /* Reduced blur from 10px to 5px */
+    animation: cardAppear 0.8s ease-out;
+  }
+  
+  @keyframes cardAppear {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .club-title {
+    color: var(--discord-white);
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .club-subtitle {
+    color: var(--discord-blurple);
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  
+  .divider {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--discord-blurple) 50%, 
+      transparent 100%);
+    height: 2px;
+    width: 80px;
+    margin: 0 auto 25px auto;
+    border-radius: 1px;
+  }
+  
+  .description {
+    color: var(--discord-light-gray);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    padding: 0 10px;
+  }
+  
+  .features-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .feature-tag {
+    background-color: rgba(88, 101, 242, 0.2); /* Increased opacity from 0.1 to 0.2 */
+    color: var(--discord-blurple);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid rgba(88, 101, 242, 0.4); /* Increased opacity from 0.3 to 0.4 */
+  }
+  
+  .discord-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-login {
+    background-color: var(--discord-blurple);
+    color: var(--discord-white);
+  }
+  
+  .btn-login:hover {
+    background-color: var(--discord-blurple-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+  }
+  
+  .btn-signup {
+    background-color: var(--discord-gray);
+    color: var(--discord-white);
+  }
+  
+  .btn-signup:hover {
+    background-color: #5d6573;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 84, 92, 0.3);
+  }
+  
+  .footer-text {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--discord-light-gray);
+    font-size: 14px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Optional: Add some styling to make text more readable against the background */
+  .club-title, .club-subtitle, .description, .footer-text {
+    position: relative;
+    z-index: 1;
+  }
+</style>
+
+<div class="welcome-container">
+  <div class="discord-card">
+    <!-- Club Name with University Reference -->
+    <h1 class="club-title">SECURINETS ISET'R</h1>
+    <div class="club-subtitle">Cybersecurity Club Server</div>
+    
+    <div class="divider"></div>
+    
+    <!-- Description -->
+    <p class="description">
+      Welcome to the official Securinets ISET'R cybersecurity club server. 
+      Connect with fellow cybersecurity enthusiasts, share knowledge, 
+      participate in CTF challenges, and collaborate on security projects.
+    </p>
+    
+    <!-- Club Features -->
+    <div class="features-list">
+      <span class="feature-tag">CTF Challenges</span>
+      <span class="feature-tag">Security Workshops</span>
+      <span class="feature-tag">Knowledge Sharing</span>
+      <span class="feature-tag">Team Collaboration</span>
+      <span class="feature-tag">Events & Meetups</span>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+      <a href="{{ url_for('log_in') }}" class="discord-btn btn-login">
+        Log In
+      </a>
+      <a href="{{ url_for('sign_up') }}" class="discord-btn btn-signup">
+        Sign Up
+      </a>
+    </div>
+    
+    <!-- Club Info -->
+    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="color: var(--discord-gray); font-size: 13px; margin: 0;">
+        Restricted Access • Club Members Only • ISET'R University
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-text">
+    <p>Secure • Professional • Community Driven</p>
+  </div>
+</div>
+{% endblock %}
