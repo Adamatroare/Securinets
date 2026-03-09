@@ -165,7 +165,13 @@ const App = () => {
           {loading ? (
             <div className="post-card" style={{ textAlign: 'center' }}>Initializing channel...</div>
           ) : (
-            posts.length > 0 ? posts.map(post => <PostCard key={post.id} post={post} />) : (
+            posts.length > 0 ? posts.map(post => (
+              <PostCard
+                key={post.id}
+                post={post}
+                onReplyCreated={() => fetchPosts(currentChannel.slug)}
+              />
+            )) : (
               <div className="post-card" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No traffic found in this channel.</div>
             )
           )}
@@ -231,7 +237,29 @@ const PostForm = ({ user, channel, onPostCreated }) => {
   );
 };
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, onReplyCreated }) => {
+  const [replyContent, setReplyContent] = useState('');
+  const [submittingReply, setSubmittingReply] = useState(false);
+
+  const handleReplySubmit = async (e) => {
+    e.preventDefault();
+    if (submittingReply || !replyContent.trim()) return;
+
+    setSubmittingReply(true);
+    try {
+      await axios.post(`${API_BASE}/replies`, {
+        post_id: post.id,
+        content: replyContent
+      });
+      setReplyContent('');
+      onReplyCreated();
+    } catch (err) {
+      alert("Failed to send reply");
+    } finally {
+      setSubmittingReply(false);
+    }
+  };
+
   return (
     <div className="post-card">
       <div className="post-header">
@@ -250,6 +278,32 @@ const PostCard = ({ post }) => {
           )}
         </div>
       )}
+
+      <div className="replies-section">
+        {post.replies && post.replies.map(reply => (
+          <div key={reply.id} className="reply-item">
+            <div className="reply-header">
+              <span className="reply-author">@{reply.poster}</span>
+              <span className="post-time" style={{ marginLeft: '10px' }}>
+                {new Date(reply.timestamp).toLocaleString()}
+              </span>
+            </div>
+            <div className="reply-content">{reply.content}</div>
+          </div>
+        ))}
+
+        <form onSubmit={handleReplySubmit} className="reply-form">
+          <input
+            type="text"
+            placeholder="Write a reply..."
+            value={replyContent}
+            onChange={e => setReplyContent(e.target.value)}
+          />
+          <button className="btn" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }} disabled={submittingReply || !replyContent.trim()}>
+            {submittingReply ? '...' : 'Reply'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

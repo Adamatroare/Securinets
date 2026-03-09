@@ -190,6 +190,23 @@ def create_post():
     db.session.commit()
     return jsonify({"message": "Post created"}), 201
 
+@app.route('/api/replies', methods=['POST'])
+def create_reply():
+    user = get_current_user()
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    post_id = request.json.get('post_id')
+    content = request.json.get('content')
+    
+    if not post_id or not content:
+        return jsonify({"error": "Missing data"}), 400
+        
+    new_reply = Reply(content=content, user_id=user.id, post_id=post_id)
+    db.session.add(new_reply)
+    db.session.commit()
+    return jsonify({"message": "Reply created"}), 201
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
