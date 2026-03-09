@@ -240,6 +240,7 @@ const PostForm = ({ user, channel, onPostCreated }) => {
 const PostCard = ({ post, onReplyCreated }) => {
   const [replyContent, setReplyContent] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
 
   const handleReplySubmit = async (e) => {
     e.preventDefault();
@@ -279,31 +280,43 @@ const PostCard = ({ post, onReplyCreated }) => {
         </div>
       )}
 
-      <div className="replies-section">
-        {post.replies && post.replies.map(reply => (
-          <div key={reply.id} className="reply-item">
-            <div className="reply-header">
-              <span className="reply-author">@{reply.poster}</span>
-              <span className="post-time" style={{ marginLeft: '10px' }}>
-                {new Date(reply.timestamp).toLocaleString()}
-              </span>
-            </div>
-            <div className="reply-content">{reply.content}</div>
-          </div>
-        ))}
-
-        <form onSubmit={handleReplySubmit} className="reply-form">
-          <input
-            type="text"
-            placeholder="Write a reply..."
-            value={replyContent}
-            onChange={e => setReplyContent(e.target.value)}
-          />
-          <button className="btn" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }} disabled={submittingReply || !replyContent.trim()}>
-            {submittingReply ? '...' : 'Reply'}
-          </button>
-        </form>
+      <div style={{ marginTop: '1rem' }}>
+        <button
+          className="btn btn-secondary"
+          style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+          onClick={() => setShowReplies(!showReplies)}
+        >
+          {showReplies ? 'Hide' : 'Show'} Replies ({post.replies?.length || 0})
+        </button>
       </div>
+
+      {showReplies && (
+        <div className="replies-section">
+          {post.replies && post.replies.map(reply => (
+            <div key={reply.id} className="reply-item">
+              <div className="reply-header">
+                <span className="reply-author">@{reply.poster}</span>
+                <span className="post-time" style={{ marginLeft: '10px' }}>
+                  {new Date(reply.timestamp).toLocaleString()}
+                </span>
+              </div>
+              <div className="reply-content">{reply.content}</div>
+            </div>
+          ))}
+
+          <form onSubmit={handleReplySubmit} className="reply-form">
+            <input
+              type="text"
+              placeholder="Write a reply..."
+              value={replyContent}
+              onChange={e => setReplyContent(e.target.value)}
+            />
+            <button className="btn" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }} disabled={submittingReply || !replyContent.trim()}>
+              {submittingReply ? '...' : 'Reply'}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
